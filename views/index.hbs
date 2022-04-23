@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet"href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+    <title> {{.Title}} </title>
+</head>
+<body>
+
+    <div class="ui button-div" style="display: flex;position: absolute;top: 21pc;left: 36pc;">
+        <button class="ui button add" title="Add Tasks" style="position: inherit;border: none;background: transparent;">
+            <i class="fa fa-plus-circle" aria-hidden="true" style="transform: scale(3.5);color: silver;"></i>
+        </button>
+        <button class="ui button delete" title="Delete Tasks" style="position: absolute;border: none;background: transparent;left: 13pc;">
+            <i class="fa fa-trash" aria-hidden="true" style="transform: scale(3.5);color: silver;"></i>
+        </button>
+    </div>
+    <div class="ui container" style="display: flex;position: absolute;top: 26pc;left: 27pc;visibility: hidden;">
+        <div class="ui input left icon input loading" style="position: inherit;">
+            <form class="form" action="/" method="post">
+                <input type="text" placeholder="Name Your Tasks!" class="tasks" name="taskin" style="border-radius: 10pc;position: absolute;width: 40pc;height: 3pc;border: 1px silver dotted;color: slategray;top: 3pc;">
+                <input type="date" class="date" name="date&time" style="display: flex;position: absolute;left: 41pc;top: 4pc;border: none;color: slategray;">
+                <div class="ui slider checkbox" style="display: flex;position: absolute;top: 0pc;left: 7pc;">
+                    <input type="checkbox" name="deadbox" class="dead" style="transform: scale(2.5);">
+                    <label style="color:red;position: relative;left: 2pc;"> Deadline </label>
+                    <input type="checkbox" name="busybox" class="busy" style="transform: scale(2.5);position: absolute;left: 9pc;">
+                    <label style="color:yellow;position: relative;left: 7pc;"> Busy </label>
+                    <input type="checkbox" name="started" class="start" style="transform: scale(2.5);position: relative;left: 9pc;">
+                    <label style="color:green;position: relative;left: 10pc;"> Started </label>
+                </div>
+                <button type="submit" class="submit" style="position: absolute;top: 8pc;width: 40pc;border: none;background: transparent; visibility: hidden;">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="delete_container" style="display: flex;position: absolute;top: 26pc;left: 35pc; visibility: hidden;">
+        <div class="ui-input" style="position: inherit;">
+            <form class="form" action="/delete" method="post">
+                <input type="date" class="date&time" name="date" id="date" style="display: flex;position: absolute;width: 23pc;left: -3pc;height: 3pc;border: none;color: slategray;">
+                <input type="checkbox" class="complete" name="complete" id="complete" style="display: flex;position: absolute;width: 23pc;left: -3pc;height: 3pc;border: none;color: slategray; top:4pc;">
+                <label class="status" style="display: flex;position: absolute;top: 5pc;left: 13pc;color: slategray;"> Task Status </label>
+                <button type="submit" class="submit" style="position: absolute;top: 5pc;width: 40pc;border: none;background: transparent;left: -2pc;">
+                    <i class="fa fa-trash" aria-hidden="true" style="position: absolute;transform: scale(2.5);color: green;"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="semantic/dist/semantic.min.js"></script>
+    <script src="https://use.fontawesome.com/0d65d62307.js"></script>
+    <script>
+        const _b01 = document.getElementsByClassName('add')[0];
+        const _d01 = document.getElementsByClassName('ui container')[0];
+
+        const _i01 = document.getElementsByClassName('dead')[0];
+        const _i02 = document.getElementsByClassName('busy')[0];
+        const _i03 = document.getElementsByClassName('start')[0];
+
+        const _i04 = document.getElementsByClassName('tasks')[0];
+        const _i05 = document.getElementsByClassName('date')[0];
+        _b01.addEventListener('click', (e) => {
+            
+            if (_d01.style.visibility === 'hidden'){
+                _d01.style.visibility = 'visible';
+
+                if (!_i04.value === ''){alert('Please add your task');}
+                
+                _i04.addEventListener('change', (e) => {
+
+                    if (_i01.checked && _i02.checked && _i03.checked){
+                        alert('Task Priority is not specified'); return
+                    }else{
+                        if (!_i01.checked && !_i02.checked && !_i03.checked){
+                            alert('Priority is not set'); return
+                        }
+
+                        console.log("date:", _i05.value);
+                        
+                        let text = _i05.value.split('-');
+                        let year = new Date().getFullYear() - text[0];
+                        let month = new Date().getMonth()+1 - text[1];
+                        let date = text[2] - new Date().getDate();
+
+                        console.log("Year: " + year, "Month:", month, "Date:", date);
+                        if (month < 0) {alert('Month had past!'); return}
+                        if (year < 0) {alert('Year had past!'); return}
+                        if (date < 0) {alert('Date had past!'); return}
+                    }
+                });
+            }else{
+                _d01.style.visibility = 'hidden';
+            }
+            
+        });
+    </script>
+    <script>
+        const _b02 = document.getElementsByClassName('delete')[0];
+        const _d02 = document.getElementsByClassName('delete_container')[0];
+        
+        const _i06 = document.getElementsByClassName('date&time')[0];
+        const _i07 = document.getElementsByClassName('complete')[0];
+        const _ii01 = document.getElementsByClassName('status')[0];
+        _b02.addEventListener('click', (event)=>{
+            if (_d02.style.visibility === 'hidden'){
+                _d02.style.visibility = 'visible';
+
+                _i07.addEventListener('change', (event)=>{
+                    
+                    let deadline = _i06.value.split('-');
+                    let year = new Date().getFullYear() - (deadline[0]);
+                    let month = new Date().getMonth()+1 - (deadline[1]);
+                    let date = deadline[2] - new Date().getDate();
+
+                    if (year < 0 ) {alert('Deadline had past!'); return}
+                    if (month < 0) { alert('Deadline had past!'); return}
+                    if (date < 0) { alert('Deadline had past!'); return}
+
+                    if (_i07.checked){
+                        _ii01.style.color = 'green';
+                        _ii01.innerHTML = 'Congrats You have completed your task! ';
+                    }else{
+                        _ii01.style.color = 'red';
+                        _ii01.innerHTML = 'Sorry ! task was not completed!';
+                    }
+                });
+            }else{
+                _d02.style.visibility = 'hidden';
+            }
+        })
+    </script>
+</body>
+</html>

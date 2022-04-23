@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package grpcc;
+
+option go_package = "github.com/ali2210/fictional-engine/stubs/grpcc";
+
+enum Priority {
+    deadline = 0;
+    busy = 1;
+    started = 2;
+}
+
+message Create_Task{
+   string task_name = 1;
+   string deadline = 2;
+   Priority level_work = 3;
+   int64 Id = 4;
+   string uid = 5;
+}
+
+message Delete_Task{
+    string task_name = 1;
+    string uid = 2;
+}
+
+message View_Task{
+    Create_Task view_task = 1;
+    string uid = 2;
+}
+
+enum Result{
+    Ok = 0;
+    Error = 1;
+}
+
+message Status{
+    Result result = 1;
+}
+
+service Task_Add{
+    rpc Add(Create_Task) returns (Status);
+}
+
+service Task_Remove{
+    rpc Remove(Delete_Task) returns (Status);
+}
+
+service List_Tasks{
+    rpc List(View_Task) returns (View_Task);
+}
